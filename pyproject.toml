@@ -35,6 +35,6 @@ classifiers = [
 
 
 [project.urls]
-homepage = "https://github.com/chipx86/grumble"
-documentation = "https://github.com/chipx86/grumble"
-repository = "https://github.com/chipx86/grumble"
+homepage = "https://github.com/beanbaginc/grumble"
+documentation = "https://github.com/beanbaginc/grumble"
+repository = "https://github.com/beanbaginc/grumble"
