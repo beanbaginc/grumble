@@ -65,9 +65,6 @@ _CLOCK_EMOJIS: List[str] = [
 ]
 
 _thread_state = threading.local()
-_thread_state.grumble_emoji_i = 0
-_thread_state.log_i = 0
-
 _cur_dir = os.getcwd()
 
 
@@ -109,11 +106,12 @@ def _get_log_file_path(
 
     filename_parts = [
         'grumble',
-        proc_name or os.path.basename(sys.executable),
+        os.path.basename(proc_name or sys.executable),
         str(pid),
     ]
 
-    if thread_name != 'MainThread':
+    if (thread_name != 'MainThread' and
+        os.environ.get('GRUMBLE_MERGE_THREADS') != '1'):
         filename_parts += [thread_name, str(thread.ident)]
 
     if log_tag:
@@ -316,9 +314,21 @@ def grumble(
         log_tag (str, optional):
             A custom tag to include in the generated log filename.
     """
+    try:
+        log_i = _thread_state.log_i
+    except AttributeError:
+        _thread_state.log_i = 0
+        log_i = 0
+
+    try:
+        emoji_i = _thread_state.grumble_emoji_i
+    except AttributeError:
+        _thread_state.grumble_emoji_i = 0
+        emoji_i = 0
+
     # Set up some identifying information.
     log_path = _get_log_file_path(log_tag=log_tag)
-    sha = hashlib.sha1(b'%d' % _thread_state.log_i).hexdigest()
+    sha = hashlib.sha1(b'%d' % log_i).hexdigest()
     now = datetime.now()
     now_str = now.strftime('%Y-%m-%d %H:%M:%S')
 
@@ -328,7 +338,6 @@ def grumble(
     #
     # We'll cycle through the list, wrapping around when we hit the last
     # one.
-    emoji_i = _thread_state.grumble_emoji_i
     emoji = _GRUMBLE_EMOJIS[emoji_i]
 
     if emoji_i < _NUM_GRUMBLE_EMOJIS:
@@ -360,6 +369,13 @@ def grumble(
         '%s  Grumble ID:  %s' % (emoji, sha),
         '%s   Timestamp:  %s %s' % (emoji, clock_emoji, now_str),
     ]
+
+    thread = threading.current_thread()
+    thread_name = thread.name
+
+    if thread_name != 'MainThread':
+        log_header_lines.append('%s      Thread:  %s (%s)'
+                                % (emoji, thread_name, thread.ident))
 
     if category:
         log_header_lines.append('%s    Category:  %s' % (emoji, category))

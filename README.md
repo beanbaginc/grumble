@@ -230,6 +230,9 @@ Works with threads and multiple processes!
 Logs are differentiated by thread and process IDs. Lock files ensure that
 logs don't get jumbled together. Because that would be annoying to deal with.
 
+If you want to collapse everything into a single log file, set
+`GRUMBLE_MERGE_THREADS=1`.
+
 
 Emojis and hashes are deterministic
 -----------------------------------
