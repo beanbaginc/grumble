@@ -23,9 +23,9 @@ Why would you want to install Grumble? Well...
 It's a Friday evening, and everything you wrote is busted
 ---------------------------------------------------------
 
-You spent all week trying to get your code work. And it should work, but it's
-not. You're furiously trying to debug it as you get increasingly exhausted,
-your brain beginning to melt into a pile of goo.
+You spent all week trying to get your code to work. And it should work, but
+it's not. You're furiously trying to debug it as you get increasingly
+exhausted, your brain beginning to melt into a pile of goo.
 
 The hours are ticking away with nothing to show for it. Your console is full
 of print output, and it's beginning to blur together into some kind of blended
